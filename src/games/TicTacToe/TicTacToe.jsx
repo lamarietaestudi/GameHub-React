@@ -117,7 +117,7 @@ const TicTacToe = () => {
               _hover={!cell ? { bg: '#f72585' } : {}}
               _active={!cell ? { bg: '#f72585' } : {}}
               onClick={() => handleCellMove(index)}
-              disabled={isGameOver || cell}
+              disabled={isGameOver || cell || player === 'O'}
             >
               {cell || ' '}
             </Button>

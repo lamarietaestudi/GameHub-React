@@ -1,7 +1,8 @@
 import { Box, Image, Text, VStack } from '@chakra-ui/react';
 import PlayButton from '../Buttons/PlayButton';
+import React from 'react';
 
-const GameCard = ({ title, image, onPlay }) => (
+const GameCard = React.memo(({ title, image, onPlay }) => (
   <Box
     w='50'
     bg='white'
@@ -35,5 +36,5 @@ const GameCard = ({ title, image, onPlay }) => (
       <PlayButton onClick={onPlay}></PlayButton>
     </VStack>
   </Box>
-);
+));
 export default GameCard;

@@ -1,6 +1,7 @@
 import { Box, Text, Image } from '@chakra-ui/react';
+import React from 'react';
 
-const PokemonBox = ({ label, isPlayer, pokemon }) => (
+const PokemonBox = React.memo(({ label, isPlayer, pokemon }) => (
   <Box
     w='52'
     h='52'
@@ -45,6 +46,6 @@ const PokemonBox = ({ label, isPlayer, pokemon }) => (
       </Text>
     )}
   </Box>
-);
+));
 
 export default PokemonBox;

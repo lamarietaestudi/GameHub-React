@@ -1,68 +1,22 @@
 import GameTemplate from '../../components/GameTemplate/GameTemplate';
 import games from '../../data/games';
-import memoryCards from '../../data/memoryData';
 import { useReducer, useEffect } from 'react';
 import { SimpleGrid, Button } from '@chakra-ui/react';
 import addPoints from '../../components/Functions/AddPoints';
 import { useNavigate } from 'react-router-dom';
+import {
+  memoryGameReducer,
+  getInitialState
+} from '../../hooks/memoryGameReducer';
 
 // Find the game title in the array that matches the specified one and return the title and instructions.
 const { title, instructions } = games.find(
   (game) => game.title === 'Memory Game'
 );
 
-//Shuffle the cards randomly at the start of the game, duplicating the array to avoid modifying the original.
-const shuffle = (cards) => {
-  return [...cards].sort(() => Math.random() - 0.5);
-};
-
-// Initial state for useReducer
-const getInitialState = () => ({
-  cards: shuffle(memoryCards),
-  flippedCards: [],
-  matchedCards: [],
-  isGameOver: false
-});
-
-// Handle game states
-function handleStates(state, action) {
-  switch (action.type) {
-    case 'FLIP_CARD':
-      if (
-        state.flippedCards.length === 2 ||
-        state.flippedCards.includes(action.index) ||
-        state.matchedCards.includes(action.index)
-      ) {
-        return state;
-      }
-      return {
-        ...state,
-        flippedCards: [...state.flippedCards, action.index]
-      };
-
-    case 'RESET_FLIPPED':
-      return {
-        ...state,
-        flippedCards: []
-      };
-
-    case 'MATCH_CARDS':
-      return {
-        ...state,
-        matchedCards: [...state.matchedCards, ...action.indexes]
-      };
-
-    case 'GAME_OVER':
-      return { ...state, isGameOver: true };
-
-    case 'RESTART_GAME':
-      return getInitialState();
-  }
-}
-
 const MemoryGame = () => {
   const [state, dispatch] = useReducer(
-    handleStates,
+    memoryGameReducer,
     undefined,
     getInitialState
   );

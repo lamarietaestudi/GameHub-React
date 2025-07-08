@@ -26,6 +26,14 @@ const handleResultMessage = (playerPokemon, rivalPokemon) => {
     )}, you lose!`;
   }
 };
+// Get random id pokemons and returns an array of these ids.
+function getRandomPokemons(count, maxPok) {
+  const idPok = new Set();
+  while (idPok.size < count) {
+    idPok.add(Math.floor(Math.random() * maxPok) + 1);
+  }
+  return Array.from(idPok);
+}
 
 const PokemonBattle = () => {
   const [pokemons, setPokemons] = useState([]);
@@ -35,28 +43,23 @@ const PokemonBattle = () => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [result, setResult] = useState('');
 
-  // Fetch 12 pokemons
+  // Fetch 12 pokemons randomly between 1 and 100 ids
   useEffect(() => {
-    const allPokemons = [];
-    let loaded = 0;
-    for (let i = 1; i < 13; i++) {
-      fetch(`https://pokeapi.co/api/v2/pokemon/${i}`)
-        .then((res) => res.json())
-        .then((pokemon) => {
-          allPokemons.push({
+    const randomPokemons = getRandomPokemons(12, 100);
+    Promise.all(
+      randomPokemons.map((id) =>
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+          .then((res) => res.json())
+          .then((pokemon) => ({
             id: pokemon.id,
             name: pokemon.name,
             image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${pokemon.id}.svg`,
             attack:
               pokemon.stats.find((stat) => stat.stat.name === 'attack')
                 ?.base_stat || 0
-          });
-          loaded++;
-          if (loaded === 12) {
-            setPokemons(allPokemons);
-          }
-        });
-    }
+          }))
+      )
+    ).then((pokemons) => setPokemons(pokemons));
   }, []);
 
   // Randomly selects a rival pokemon and call the function handleResultMessage to send the message of the result of the game to the modal compoponent.

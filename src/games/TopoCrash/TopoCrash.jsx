@@ -119,6 +119,7 @@ const TopoCrash = () => {
         >
           <Image
             src={scenarioImage}
+            draggable={false}
             alt='grass'
             position='absolute'
             objectFit='cover'
@@ -149,6 +150,7 @@ const TopoCrash = () => {
                 key={topo.id}
                 src={topoImage}
                 alt='topo'
+                draggable={false}
                 position='absolute'
                 left={topo.left}
                 top={topo.top}

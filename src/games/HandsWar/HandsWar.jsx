@@ -1,9 +1,10 @@
 import GameTemplate from '../../components/GameTemplate/GameTemplate';
 import games from '../../data/games';
-import { useState } from 'react';
+import { useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Text, SimpleGrid, Button, Image, Box } from '@chakra-ui/react';
 import addPoints from '../../components/Functions/AddPoints';
+import { getInitialState, handsWarReducer } from '../../hooks/handsWarReducer';
 
 const { title, instructions } = games.find(
   (game) => game.title === 'Hands War'
@@ -38,22 +39,21 @@ const handleResultMessage = (playerHand, rivalHand) => {
 };
 
 const HandsWar = () => {
-  const [playerHand, setPlayerHand] = useState('');
-  const [rivalHand, setRivalHand] = useState('');
-  const [showRivalHand, setShowRivalHand] = useState(false);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [result, setResult] = useState('');
+  const [state, dispatch] = useReducer(handsWarReducer, getInitialState);
+  const { playerHand, rivalHand, showRivalHand, isGameOver, result } = state;
 
-  // Randomly selects a rival hand and call the function handleResultMessage to send the message of the result of the game to the modal compoponent.
+  const handlePlayerHand = (value) => {
+    dispatch({ type: 'SET_PLAYER_HAND', value });
+  };
+
+  // Randomly selects a rival hand and call the function handleResultMessage to send the message of the result of the game to the modal component.
   const handleRivalHand = () => {
     const randomHand =
       handChoices[Math.floor(Math.random() * handChoices.length)].value;
-    setRivalHand(randomHand);
-    setShowRivalHand(true);
+    dispatch({ type: 'SET_RIVAL_HAND', value: randomHand });
 
     const message = handleResultMessage(playerHand, randomHand);
-    setResult(message);
-    setIsGameOver(true);
+    dispatch({ type: 'SET_RESULT', value: message });
 
     if (message.includes('win')) {
       addPoints(); // Add points if the player wins
@@ -62,17 +62,13 @@ const HandsWar = () => {
 
   // It resets the game and updates the board.
   const handleReplay = () => {
-    setPlayerHand('');
-    setRivalHand('');
-    setIsGameOver(false);
-    setResult('');
-    setShowRivalHand(false);
+    dispatch({ type: 'RESTART_GAME' });
   };
 
   // It redirects to the home page
   const navigate = useNavigate();
   const handleHome = () => {
-    setIsGameOver(false);
+    dispatch({ type: 'RESTART_GAME' });
     navigate('/');
   };
 
@@ -98,7 +94,7 @@ const HandsWar = () => {
               key={hand.value}
               h='150px'
               w='150px'
-              onClick={() => setPlayerHand(hand.value)}
+              onClick={() => handlePlayerHand(hand.value)}
               isDisabled={!playerHand}
               variant={playerHand === hand.value ? 'solid' : 'outline'}
               borderWidth={playerHand === hand.value ? '3px' : '1px'}

@@ -1,6 +1,6 @@
 import { Button, Image, Text } from '@chakra-ui/react';
-
-const PokemonCard = ({ pokemon, selected, disabled, onClick }) => (
+import React from 'react';
+const PokemonCard = React.memo(({ pokemon, selected, disabled, onClick }) => (
   <Button
     h='100px'
     w='100px'
@@ -26,6 +26,6 @@ const PokemonCard = ({ pokemon, selected, disabled, onClick }) => (
       {pokemon.name}
     </Text>
   </Button>
-);
+));
 
 export default PokemonCard;
