@@ -1,6 +1,6 @@
 import { Flex, Heading, Text, Box } from '@chakra-ui/react';
 import GameModal from '../GameModal/GameModal';
-import BackHomeButton from '../buttons/BackToHomeButton';
+import BackHomeButton from '../Buttons/BackToHomeButton';
 
 const GameTemplate = ({
   title,

@@ -1,5 +1,5 @@
 import { Flex, Box, Heading, Text } from '@chakra-ui/react';
-import BackHomeButton from '../components/Buttons/BackToHomeButton/';
+import BackHomeButton from '../components/Buttons/BackToHomeButton';
 
 const NotFound = () => {
   return (
